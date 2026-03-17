@@ -4,552 +4,186 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Роман Егоров | AI-интегратор</title>
-    <!-- Font Awesome для иконок -->
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Библиотека для эффекта наклона карточек -->
+    <!-- VanillaTilt -->
     <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.0/dist/vanilla-tilt.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0A0F1F;
-            background-image: radial-gradient(circle at 30% 40%, rgba(100, 40, 140, 0.15) 0%, transparent 40%),
-                              radial-gradient(circle at 80% 70%, rgba(0, 180, 255, 0.08) 0%, transparent 50%),
-                              radial-gradient(circle at 10% 80%, rgba(180, 40, 255, 0.1) 0%, transparent 40%);
-            color: #f0f0f0;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-         .glass-card {
-            background: rgba(15, 25, 45, 0.85); /* тёмно-синий с прозрачностью */
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .glass-card:hover {
-            border-color: rgba(183, 41, 255, 0.5);
-            box-shadow: 0 15px 40px rgba(183, 41, 255, 0.25), 0 0 20px rgba(0, 247, 255, 0.2);
-        }
-
-        :root {
-            --neon-blue: #00f7ff;
-            --neon-purple: #b829ff;
-            --dark-blue: #0f172a;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Стили для анимации появления при скролле */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px) scale(0.98);
-            transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.8s cubic-bezier(0.2, 0.9, 0.3, 1);
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        h1, h2, h3 {
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        h1 {
-            font-size: 3rem;
-            background: linear-gradient(135deg, #fff 0%, var(--neon-purple) 80%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-        }
-
-        h2 {
-            font-size: 2.2rem;
-            margin-bottom: 30px;
-            position: relative;
-            display: inline-block;
-        }
-
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--neon-purple), var(--neon-blue));
-            border-radius: 2px;
-        }
-
-        .hero {
-            display: flex;
-            align-items: center;
-            gap: 50px;
-            flex-wrap: wrap;
-            margin-top: 40px;
-        }
-
-        .hero-content {
-            flex: 1;
-            min-width: 280px;
-        }
-
-        .hero-photo {
-            flex: 0 0 300px;
-            text-align: center;
-        }
-
-        .hero-photo img {
-            width: 100%;
-            max-width: 300px;
-            border-radius: 20px;
-            border: 3px solid var(--neon-purple);
-            box-shadow: 0 0 30px rgba(183, 41, 255, 0.5);
-            transition: box-shadow 0.3s;
-        }
-
-        .hero-photo img:hover {
-            box-shadow: 0 0 50px rgba(0, 247, 255, 0.7);
-        }
-
-        .dynamic-text {
-            font-size: 1.8rem;
-            margin: 15px 0;
-            color: #ccc;
-        }
-
-        #typed-text {
-            color: var(--neon-blue);
-            border-right: 2px solid var(--neon-blue);
-            padding-right: 5px;
-            animation: blink 0.7s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { border-color: transparent; }
-            50% { border-color: var(--neon-blue); }
-        }
-
-        .hero-description {
-            font-size: 1.1rem;
-            margin: 20px 0 30px;
-            color: #aaa;
-        }
-
-        .btn {
-            display: inline-block;
-            background: transparent;
-            color: #fff;
-            border: 2px solid var(--neon-purple);
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s;
-            box-shadow: 0 0 10px rgba(183, 41, 255, 0.3);
-        }
-
-        .btn:hover {
-            background: var(--neon-purple);
-            color: #000;
-            box-shadow: 0 0 30px var(--neon-purple);
-            transform: scale(1.05);
-        }
-
-        .btn-neon-blue {
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
-        }
-
-        .btn-neon-blue:hover {
-            background: var(--neon-blue);
-            color: #000;
-            box-shadow: 0 0 30px var(--neon-blue);
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
-        }
-
-        .skill-item {
-            background: var(--glass-bg);
-            backdrop-filter: blur(5px);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            padding: 25px 20px;
-            text-align: center;
-            transition: all 0.3s;
-            /* Убираем transform отсюда, так как им будет управлять VanillaTilt */
-        }
-
-        .skill-item:hover {
-            border-color: var(--neon-purple);
-            box-shadow: 0 0 30px rgba(183, 41, 255, 0.3);
-        }
-
-        .skill-item i {
-            font-size: 2.5rem;
-            color: var(--neon-blue);
-            margin-bottom: 15px;
-        }
-
-        .skill-item h3 {
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-            color: #fff;
-        }
-
-        .skill-item p {
-            color: #aaa;
-            font-size: 0.95rem;
-            word-break: break-word;
-        }
-
-        .about-text, .resume-text {
-            font-size: 1.1rem;
-            color: #ddd;
-            max-width: 800px;
-            word-break: break-word;
-        }
-
-        .about-text p, .resume-text p {
-            margin-bottom: 15px;
-        }
-
-        .highlight {
-            color: var(--neon-blue);
-            font-weight: 600;
-        }
-
-        .edu-list {
-            list-style: none;
-            margin-top: 20px;
-        }
-
-        .edu-list li {
-            margin-bottom: 10px;
-            padding-left: 30px;
-            position: relative;
-            word-break: break-word;
-        }
-
-        .edu-list li::before {
-            content: '▹';
-            color: var(--neon-purple);
-            font-size: 1.5rem;
-            position: absolute;
-            left: 0;
-            top: -5px;
-        }
-
-        .contacts-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 30px;
-        }
-
-        .contact-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(5px);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            padding: 20px 30px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            text-decoration: none;
-            color: #fff;
-            transition: all 0.3s;
-            min-width: 200px;
-            flex: 1 1 auto;
-        }
-
-        .contact-card i {
-            font-size: 2rem;
-            color: var(--neon-blue);
-        }
-
-        .contact-card span {
-            font-size: 1.1rem;
-            word-break: break-word;
-        }
-
-        .contact-card:hover {
-            border-color: var(--neon-purple);
-            box-shadow: 0 0 30px rgba(183, 41, 255, 0.4);
-            transform: translateY(-3px);
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px 0;
-            color: #666;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            margin-top: 40px;
-        }
-
-        /* Мобильная адаптация */
-        @media (max-width: 992px) {
-            h1 { font-size: 2.5rem; }
-            h2 { font-size: 2rem; }
-            .dynamic-text { font-size: 1.5rem; }
-        }
-
-        @media (max-width: 768px) {
-            .hero {
-                flex-direction: column-reverse;
-                text-align: center;
-                gap: 30px;
-            }
-            .hero-photo {
-                flex-basis: auto;
-                max-width: 250px;
-                margin: 0 auto;
-            }
-            h2::after {
-                left: 50%;
-                transform: translateX(-50%);
-                width: 80px;
-            }
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
-            .contacts-grid {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .contact-card {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h1 { font-size: 2rem; }
-            h2 { font-size: 1.8rem; }
-            .dynamic-text { font-size: 1.3rem; }
-            .hero-description { font-size: 1rem; }
-            .btn {
-                padding: 10px 20px;
-                font-size: 1rem;
-            }
-            .hero-photo {
-                max-width: 200px;
-            }
-            .glass-card {
-                padding: 20px;
-            }
-            .skill-item {
-                padding: 20px 15px;
-            }
-            .contact-card {
-                padding: 15px 20px;
-            }
-            .contact-card i {
-                font-size: 1.5rem;
-            }
-            .contact-card span {
-                font-size: 1rem;
-            }
-        }
-    </style>
+    <!-- Подключаем CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Hero (без анимации reveal, чтобы сразу было видно) -->
-        <section class="hero">
-            <div class="hero-content">
-                <h1>Егоров Роман</h1>
-                <div class="dynamic-text">
-                    <span>я </span><span id="typed-text"></span>
-                </div>
-                <p class="hero-description">
-                    Превращаю текст в контент, автоматизирую бизнес-процессы и внедряю ИИ в любую структуру. 
-                    Индивидуальные решения, которые заменяют целые отделы и повышают эффективность.
-                </p>
-                <a href="https://t.me/Mr_Amor4ick" class="btn btn-neon-blue" target="_blank"><i class="fab fa-telegram"></i> Написать в Telegram</a>
-            </div>
-            <div class="hero-photo">
-                <img src="myphoto.jpg" alt="Роман Егоров">
-            </div>
-        </section>
+    <div class="site-wrapper" id="siteWrapper">
+        <!-- Левая панель: основной сайт -->
+        <div class="main-panel">
+            <div class="container">
+                <!-- Hero -->
+                <section class="hero">
+                    <div class="hero-content">
+                        <h1>Егоров Роман</h1>
+                        <div class="dynamic-text">
+                            <span>я </span><span id="typed-text"></span>
+                        </div>
+                        <p class="hero-description">
+                            Превращаю текст в контент, автоматизирую бизнес-процессы и внедряю ИИ в любую структуру. 
+                            Индивидуальные решения, которые заменяют целые отделы и повышают эффективность.
+                        </p>
+                        <a href="https://t.me/Mr_Amor4ick" class="btn btn-neon-blue" target="_blank"><i class="fab fa-telegram"></i> Написать в Telegram</a>
+                    </div>
+                    <div class="hero-photo">
+                        <img src="myphoto.jpg" alt="Роман Егоров">
+                    </div>
+                </section>
 
-        <!-- Ключевые навыки -->
-        <section class="reveal">
-            <h2>Что я делаю</h2>
-            <div class="skills-grid">
-                <div class="skill-item" data-tilt data-tilt-max="8" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
-                    <i class="fas fa-robot"></i>
-                    <h3>AI-интеграция</h3>
-                    <p>Внедряю искусственный интеллект в бизнес-процессы, создаю чат-ботов и автоматизирую рутину.</p>
-                </div>
-                <div class="skill-item" data-tilt data-tilt-max="8" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
-                    <i class="fas fa-paint-brush"></i>
-                    <h3>Генерация контента</h3>
-                    <p>Текст → изображения, видео, реклама. Создаю креативы с помощью нейросетей.</p>
-                </div>
-                <div class="skill-item" data-tilt data-tilt-max="8" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
-                    <i class="fas fa-code"></i>
-                    <h3>Разработка</h3>
-                    <p>Python, C++, веб-дизайн. Пишу код для сложных математических и AI-задач.</p>
-                </div>
-                <div class="skill-item" data-tilt data-tilt-max="8" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
-                    <i class="fas fa-language"></i>
-                    <h3>English C1</h3>
-                    <p>Свободно владею английским (самооценка C1). Планирую поступление в ВШЭ на Факультет компьютерных наук.</p>
-                </div>
-            </div>
-        </section>
+                <!-- Ключевые навыки -->
+                <section class="reveal">
+                    <h2>Что я делаю</h2>
+                    <div class="skills-grid">
+                        <div class="skill-item" data-tilt>
+                            <i class="fas fa-robot"></i>
+                            <h3>AI-интеграция</h3>
+                            <p>Внедряю искусственный интеллект в бизнес-процессы, создаю чат-ботов и автоматизирую рутину.</p>
+                        </div>
+                        <div class="skill-item" data-tilt>
+                            <i class="fas fa-paint-brush"></i>
+                            <h3>Генерация контента</h3>
+                            <p>Текст → изображения, видео, реклама. Создаю креативы с помощью нейросетей.</p>
+                        </div>
+                        <div class="skill-item" data-tilt>
+                            <i class="fas fa-code"></i>
+                            <h3>Разработка</h3>
+                            <p>Python, C++, веб-дизайн. Пишу код для сложных математических и AI-задач.</p>
+                        </div>
+                        <div class="skill-item" data-tilt>
+                            <i class="fas fa-language"></i>
+                            <h3>English C1</h3>
+                            <p>Свободно владею английским (самооценка C1). Планирую поступление в ВШЭ на Факультет компьютерных наук.</p>
+                        </div>
+                    </div>
+                </section>
 
-        <!-- Обо мне и образование -->
-        <section class="reveal">
-            <h2>Кто я</h2>
-            <div class="glass-card about-text" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.15">
-                <p>
-                    Выпускник физико-математической школы №57 и Московской школы программистов (МШП), 
-                    где освоил Python, C++, веб-дизайн, Photoshop и работу со сложными функциями.
-                </p>
-                <p>
-                    <span class="highlight">Моя суперсила:</span> Я идеально владею любым ИИ. Могу превратить текст в картинку, 
-                    рекламу или целое видео, придумать систему внедрения ИИ в любую структуру и заменить человека или целый отдел. 
-                    Быстро обучаюсь новому, даже неизвестным ранее направлениям.
-                </p>
-                <p>
-                    Цель — поступление в <strong>ВШЭ на Факультет компьютерных наук</strong> для углублённого изучения ИИ. 
-                    Английский — C1 (самооценка). Готов предоставить проекты и грамоты по запросу.
-                </p>
-                <ul class="edu-list">
-                    <li><strong>Школа №57</strong> — одна из сильнейших физмат школ России</li>
-                    <li><strong>Московская школа программистов (МШП)</strong> — программирование, алгоритмы, веб-дизайн</li>
-                </ul>
-            </div>
-        </section>
+                <!-- Обо мне и образование -->
+                <section class="reveal">
+                    <h2>Кто я</h2>
+                    <div class="glass-card about-text" data-tilt>
+                        <p>
+                            Выпускник физико-математической школы №57 и Московской школы программистов (МШП), 
+                            где освоил Python, C++, веб-дизайн, Photoshop и работу со сложными функциями.
+                        </p>
+                        <p>
+                            <span class="highlight">Моя суперсила:</span> Я идеально владею любым ИИ. Могу превратить текст в картинку, 
+                            рекламу или целое видео, придумать систему внедрения ИИ в любую структуру и заменить человека или целый отдел. 
+                            Быстро обучаюсь новому, даже неизвестным ранее направлениям.
+                        </p>
+                        <p>
+                            Цель — поступление в <strong>ВШЭ на Факультет компьютерных наук</strong> для углублённого изучения ИИ. 
+                            Английский — C1 (самооценка). Готов предоставить проекты и грамоты по запросу.
+                        </p>
+                        <ul class="edu-list">
+                            <li><strong>Школа №57</strong> — одна из сильнейших физмат школ России</li>
+                            <li><strong>Московская школа программистов (МШП)</strong> — программирование, алгоритмы, веб-дизайн</li>
+                        </ul>
+                    </div>
+                </section>
 
-        <!-- Резюме -->
-        <section class="reveal">
-            <h2>Резюме</h2>
-            <div class="glass-card resume-text" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.15">
-                <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Егоров Роман Максимович</h3>
-                <p><strong>Образование:</strong> Школа №57 (физмат), Московская школа программистов (МШП). Выпускник.</p>
-                <p><strong>Ключевые навыки:</strong> AI-интеграция, генерация контента, Python, C++, веб-дизайн, английский язык (C1).</p>
-                <p><strong>Цель:</strong> Поступление в ВШЭ на Факультет компьютерных наук, углублённое изучение искусственного интеллекта.</p>
-                <p><strong>Достижения:</strong> Готов предоставить проекты и грамоты по запросу.</p>
-                <div style="text-align: center; margin-top: 25px;">
-                    <a href="resume.pdf" class="btn" download><i class="fas fa-download"></i> Скачать резюме (PDF)</a>
+                <!-- Резюме -->
+                <section class="reveal">
+                    <h2>Резюме</h2>
+                    <div class="glass-card resume-text" data-tilt>
+                        <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Егоров Роман Максимович</h3>
+                        <p><strong>Образование:</strong> Школа №57 (физмат), Московская школа программистов (МШП). Выпускник.</p>
+                        <p><strong>Ключевые навыки:</strong> AI-интеграция, генерация контента, Python, C++, веб-дизайн, английский язык (C1).</p>
+                        <p><strong>Цель:</strong> Поступление в ВШЭ на Факультет компьютерных наук, углублённое изучение искусственного интеллекта.</p>
+                        <p><strong>Достижения:</strong> Готов предоставить проекты и грамоты по запросу.</p>
+                        <div style="text-align: center; margin-top: 25px;">
+                            <a href="resume.pdf" class="btn" download><i class="fas fa-download"></i> Скачать резюме (PDF)</a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Кнопка-триггер -->
+                <section class="reveal" style="text-align: center;">
+                    <div class="help-trigger" id="helpTrigger">
+                        Как я могу вам помочь?
+                    </div>
+                </section>
+
+                <!-- Контакты -->
+                <section class="reveal">
+                    <h2>Свяжитесь со мной</h2>
+                    <div class="contacts-grid">
+                        <a href="https://t.me/Mr_Amor4ick" class="contact-card" data-tilt target="_blank">
+                            <i class="fab fa-telegram-plane"></i>
+                            <span>@Mr_Amor4ick</span>
+                        </a>
+                        <a href="https://instagram.com/Amor4ick" class="contact-card" data-tilt target="_blank">
+                            <i class="fab fa-instagram"></i>
+                            <span>Amor4ick</span>
+                        </a>
+                        <a href="mailto:Lastroman1@mail.ru" class="contact-card" data-tilt>
+                            <i class="fas fa-envelope"></i>
+                            <span>Lastroman1@mail.ru</span>
+                        </a>
+                    </div>
+                </section>
+
+                <footer>
+                    <p>© 2026 Егоров Роман. Все права защищены.</p>
+                </footer>
+            </div>
+        </div>
+
+        <!-- Правая панель: помощь -->
+        <div class="help-panel">
+            <div class="container">
+                <div class="back-button" id="backButton">
+                    <i class="fas fa-arrow-left"></i> Назад
                 </div>
-            </div>
-        </section>
+                <!-- Изменено: "Кто я?" вместо "Кто я и что мне нужно?" -->
+                <div class="help-subtitle">Кто я?</div>
 
-        <!-- Контакты -->
-        <section class="reveal">
-            <h2>Свяжитесь со мной</h2>
-            <div class="contacts-grid">
-                <a href="https://t.me/Mr_Amor4ick" class="contact-card" data-tilt data-tilt-max="5" data-tilt-speed="400" target="_blank">
-                    <i class="fab fa-telegram-plane"></i>
-                    <span>@Mr_Amor4ick</span>
-                </a>
-                <a href="https://instagram.com/Amor4ick" class="contact-card" data-tilt data-tilt-max="5" data-tilt-speed="400" target="_blank">
-                    <i class="fab fa-instagram"></i>
-                    <span>Amor4ick</span>
-                </a>
-                <a href="mailto:Lastroman1@mail.ru" class="contact-card" data-tilt data-tilt-max="5" data-tilt-speed="400">
-                    <i class="fas fa-envelope"></i>
-                    <span>Lastroman1@mail.ru</span>
-                </a>
-            </div>
-        </section>
+                <div class="help-grid" id="helpGrid">
+                    <div class="help-card" data-category="business">
+                        <h3>👔 Предприниматель</h3>
+                        <p>Автоматизация учёта, внедрение ИИ в бизнес-процессы</p>
+                    </div>
+                    <div class="help-card" data-category="creator">
+                        <h3>🎬 Креатор</h3>
+                        <p>Монтаж видео, генерация контента с помощью ИИ</p>
+                    </div>
+                    <div class="help-card" data-category="photo">
+                        <h3>📸 Фотограф</h3>
+                        <p>Обработка фото, ретушь, генерация изображений</p>
+                    </div>
+                    <div class="help-card" data-category="student">
+                        <h3>📚 Студент</h3>
+                        <p>Помощь в проектах, объяснение сложных тем</p>
+                    </div>
+                    <div class="help-card" data-category="marketing">
+                        <h3>📈 Маркетолог</h3>
+                        <p>Написание текстов, создание рекламных креативов</p>
+                    </div>
+                    <div class="help-card" data-category="dev">
+                        <h3>💻 Разработчик</h3>
+                        <p>Консультации по коду, интеграция AI-сервисов</p>
+                    </div>
+                </div>
 
-        <footer>
-            <p>© 2026 Егоров Роман. Все права защищены.</p>
-        </footer>
+                <div class="help-description" id="helpDescription"></div>
+                
+                <!-- Заголовок "Чем ты полезен?" -->
+                <div class="help-subtitle-small">Чем ты полезен?</div>
+                
+                <div class="extra-buttons" id="extraButtons"></div>
+                <div class="details-panel" id="detailsPanel"></div>
+            </div>
+        </div>
     </div>
 
-    <!-- Скрипт печатающегося текста -->
-    <script>
-        const typedTextSpan = document.getElementById('typed-text');
-        const words = ['AI-интегратор', 'автоматизатор', 'исследователь', 'генератор контента'];
-        let wordIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-
-        function type() {
-            const currentWord = words[wordIndex];
-            if (isDeleting) {
-                typedTextSpan.textContent = currentWord.substring(0, charIndex - 1);
-                charIndex--;
-            } else {
-                typedTextSpan.textContent = currentWord.substring(0, charIndex + 1);
-                charIndex++;
-            }
-
-            if (!isDeleting && charIndex === currentWord.length) {
-                isDeleting = true;
-                setTimeout(type, 1500);
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                wordIndex = (wordIndex + 1) % words.length;
-                setTimeout(type, 300);
-            } else {
-                setTimeout(type, 100);
-            }
-        }
-        document.addEventListener('DOMContentLoaded', type);
-    </script>
-
-    <!-- Скрипт для анимации появления при скролле (Intersection Observer) -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const revealElements = document.querySelectorAll('.reveal');
-            
-            function checkReveal() {
-                for (let el of revealElements) {
-                    const windowHeight = window.innerHeight;
-                    const rect = el.getBoundingClientRect();
-                    const revealPoint = 100; // пикселей от нижнего края, когда начинается анимация
-                    
-                    if (rect.top < windowHeight - revealPoint) {
-                        el.classList.add('active');
-                    }
-                }
-            }
-            
-            // Запускаем при загрузке (если элементы уже видны)
-            checkReveal();
-            
-            // И при скролле
-            window.addEventListener('scroll', checkReveal);
-        });
-    </script>
-
-    <!-- Инициализация VanillaTilt для карточек -->
-    <script>
-        VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
-            max: 10,        // максимальный угол наклона
-            speed: 400,      // скорость перехода
-            glare: true,     // включаем эффект блика
-            "max-glare": 0.2, // интенсивность блика
-            gyroscope: true,  // поддержка гироскопа на мобильных (если есть)
-        });
-    </script>
+    <!-- Подключаем JS -->
+    <script src="script.js"></script>
 </body>
 </html>
